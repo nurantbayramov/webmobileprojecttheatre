@@ -1,1 +1,104 @@
+/* basic page styles and layout */
+* { box-sizing: border-box; }
 
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f1220;
+  color: #eef0f8;
+}
+
+header { padding: 16px 20px 4px; }
+header h1 { margin: 0; font-size: 24px; }
+header p { margin: 4px 0 0; color: #98a0bd; }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 16px;
+  padding: 12px 20px 24px;
+  align-items: start;
+}
+
+aside .card { margin-bottom: 16px; }
+
+/* the box that holds the map */
+.map-wrap {
+  position: relative;
+  border: 1px solid #2d3358;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #151932;
+}
+
+.viewport {
+  height: 70vh;
+  min-height: 320px;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+
+/* cards on the right */
+.card {
+  background: #181c30;
+  border: 1px solid #2d3358;
+  border-radius: 12px;
+  padding: 16px;
+}
+.card h2 { margin: 0 0 10px; font-size: 17px; }
+.muted { color: #98a0bd; margin: 0; font-size: 14px; }
+
+dl { margin: 0 0 12px; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+dt { color: #98a0bd; font-size: 14px; }
+dd { margin: 0; font-weight: bold; }
+.price { font-size: 22px; color: #ffcc4d; }
+
+.tag { padding: 1px 8px; border-radius: 10px; font-size: 13px; font-weight: bold; }
+.tag.available { background: #2f7d4f; }
+.tag.unavailable { background: #5a5f78; }
+.tag.incart { background: #000; color: #5dff9a; border: 1px solid #5dff9a; }
+
+.add-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #ffcc4d;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.add-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* cart */
+.cart-list { list-style: none; margin: 0; padding: 0; max-height: 260px; overflow-y: auto; }
+.cart-list li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #2d3358;
+}
+.cart-list small { color: #98a0bd; }
+.remove {
+  color: #ff8a8a;
+  background: none;
+  border: 1px solid #5b3a46;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.total { font-size: 18px; margin: 12px 0; }
+.total strong { font-size: 24px; color: #ffcc4d; }
+.clear-btn {
+  width: 100%;
+  padding: 8px;
+  color: #98a0bd;
+  background: none;
+  border: 1px solid #2d3358;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.clear-btn:disabled { opacity: 0.35; cursor: not-allowed; }
