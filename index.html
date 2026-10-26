@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grand Aurora Theatre - Tickets</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Grand Aurora Theatre</h1>
+    <p>Click a seat to look at it, then press ADD TO CART to buy it.</p>
+  </header>
+
+  <main class="layout">
+
+    <!-- left side: the seat map -->
+    <section>
+      <div class="map-wrap">
+        <div id="viewport" class="viewport">
+          <div id="world" class="world"></div>
+        </div>
+      </div>
+      <ul id="legend" class="legend"></ul>
+    </section>
+
+    <!-- right side: seat details and cart -->
+    <aside>
+      <div class="card">
+        <h2>Seat details</h2>
+        <div id="details">
+          <p class="muted">No seat selected. Click a seat on the map.</p>
+        </div>
+        <button id="add-to-cart" class="add-btn" disabled>ADD TO CART</button>
+      </div>
+
+      <div class="card">
+        <h2>Your cart (<span id="cart-count">0</span>)</h2>
+        <ul id="cart-list" class="cart-list"></ul>
+        <p id="cart-empty" class="muted">Your cart is empty.</p>
+        <p class="total">Total: <strong id="cart-total">$0</strong></p>
+        <button id="clear-cart" class="clear-btn">Clear cart</button>
+      </div>
+    </aside>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
