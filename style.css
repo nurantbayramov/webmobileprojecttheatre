@@ -102,3 +102,85 @@ dd { margin: 0; font-weight: bold; }
   cursor: pointer;
 }
 .clear-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* the venue itself (stage, labels, seats) */
+.world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+
+.stage {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffcc4d;
+  border-radius: 6px 6px 40px 40px;
+  background: #3b3119;
+  color: #ffcc4d;
+  font-weight: bold;
+  letter-spacing: 6px;
+}
+
+.entrance {
+  position: absolute;
+  padding: 4px 0;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #98a0bd;
+  border: 1px dashed #2d3358;
+}
+
+.section-label {
+  position: absolute;
+  font-size: 12px;
+  color: #98a0bd;
+  white-space: nowrap;
+}
+
+.row-label {
+  position: absolute;
+  width: 16px;
+  height: 22px;
+  text-align: center;
+  line-height: 22px;
+  font-size: 10px;
+  color: #98a0bd;
+}
+
+.seat {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  font-size: 9px;
+  font-weight: bold;
+  color: white;
+  background: var(--color);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px 5px 3px 3px;
+  cursor: pointer;
+}
+.seat:hover { transform: scale(1.15); }
+
+.legend {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 14px;
+  color: #98a0bd;
+}
+.legend li { display: flex; align-items: center; gap: 6px; }
+.swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--color);
+}
