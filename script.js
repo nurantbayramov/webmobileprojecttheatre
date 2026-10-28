@@ -54,3 +54,113 @@ var clearBtn = document.getElementById("clear-cart");
 function money(n) {
   return "$" + n;
 }
+
+// ---------- making the seats from the data ----------
+
+function makeSeats() {
+  for (var s = 0; s < sections.length; s++) {
+    var sec = sections[s];
+    var cat = categories[sec.category];
+
+    for (var r = 0; r < sec.rows; r++) {
+      var rowLetter = String.fromCharCode(sec.firstRow.charCodeAt(0) + r);
+
+      for (var c = 0; c < sec.cols; c++) {
+        var number = c + 1;
+        var key = rowLetter + number;
+
+        var x = sec.x + c * SEAT_GAP;
+        if (sec.aisleAfter > 0 && c >= sec.aisleAfter) {
+          x = x + AISLE;
+        }
+        var y = sec.y + r * SEAT_GAP;
+
+        // a seat is sold if it is in the sold list, or by this little pattern
+        var isSold = sec.sold.indexOf(key) !== -1 || (r * 5 + c * 3) % 11 === 0;
+
+        seats.push({
+          id: sec.id + "-" + key,
+          sectionName: sec.name,
+          category: sec.category,
+          categoryName: cat.name,
+          price: cat.price,
+          row: rowLetter,
+          number: number,
+          x: x,
+          y: y,
+          available: !isSold
+        });
+      }
+    }
+  }
+}
+
+// find a seat object using its id
+function findSeat(id) {
+  for (var i = 0; i < seats.length; i++) {
+    if (seats[i].id === id) {
+      return seats[i];
+    }
+  }
+  return null;
+}
+
+// small helper to make a div at a position
+function makeBox(className, left, top, text) {
+  var box = document.createElement("div");
+  box.className = className;
+  box.style.left = left + "px";
+  box.style.top = top + "px";
+  box.textContent = text;
+  return box;
+}
+
+function drawVenue() {
+  world.style.width = WORLD_W + "px";
+  world.style.height = WORLD_H + "px";
+
+  // stage
+  var stageBox = makeBox("stage", stage.x, stage.y, "STAGE");
+  stageBox.style.width = stage.width + "px";
+  stageBox.style.height = stage.height + "px";
+  world.appendChild(stageBox);
+
+  // entrance
+  var door = makeBox("entrance", 480, 700, "MAIN ENTRANCE");
+  door.style.width = "240px";
+  world.appendChild(door);
+
+  // section names and row letters
+  for (var s = 0; s < sections.length; s++) {
+    var sec = sections[s];
+    var price = categories[sec.category].price;
+    world.appendChild(makeBox("section-label", sec.x, sec.y - 22, sec.name + " - " + money(price)));
+
+    for (var r = 0; r < sec.rows; r++) {
+      var letter = String.fromCharCode(sec.firstRow.charCodeAt(0) + r);
+      world.appendChild(makeBox("row-label", sec.x - 20, sec.y + r * SEAT_GAP, letter));
+    }
+  }
+
+  // the seats (one button each)
+  for (var i = 0; i < seats.length; i++) {
+    var seat = seats[i];
+    var btn = document.createElement("button");
+    btn.className = "seat";
+    if (!seat.available) {
+      btn.className = "seat unavailable";
+    }
+    btn.dataset.id = seat.id;
+    btn.style.left = seat.x + "px";
+    btn.style.top = seat.y + "px";
+    btn.style.setProperty("--color", categories[seat.category].color);
+    btn.title = seat.sectionName + ", Row " + seat.row + ", Seat " + seat.number + " - " + money(seat.price);
+    btn.innerHTML = "<span>" + seat.number + "</span>";
+    seatButtons[seat.id] = btn;
+    world.appendChild(btn);
+  }
+}
+
+// ---------- start ----------
+makeSeats();
+drawVenue();
