@@ -209,3 +209,12 @@ dd { margin: 0; font-weight: bold; }
   transform: scale(1.25);
   z-index: 5;
 }
+
+/* seats that are in the cart */
+.seat.in-cart {
+  background: #000;
+  color: #5dff9a;
+  border-color: #5dff9a;
+}
+.seat.in-cart span { display: none; }
+.seat.in-cart::after { content: "\2713"; font-size: 12px; }
