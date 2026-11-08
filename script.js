@@ -271,6 +271,27 @@ function addToCart(id) {
   showDetails(id);
 }
 
+function removeFromCart(id) {
+  var index = cart.indexOf(id);
+  if (index === -1) {
+    return;
+  }
+  cart.splice(index, 1);
+  refreshSeat(id);        // the seat on the map changes back right away
+  drawCart();
+  showDetails(selectedId);
+}
+
+function clearCart() {
+  var oldCart = cart;
+  cart = [];
+  for (var i = 0; i < oldCart.length; i++) {
+    refreshSeat(oldCart[i]);
+  }
+  drawCart();
+  showDetails(selectedId);
+}
+
 function drawCart() {
   cartList.innerHTML = "";
   var total = 0;
@@ -286,14 +307,24 @@ function drawCart() {
     var price = document.createElement("span");
     price.textContent = money(seat.price);
 
+    var removeBtn = document.createElement("button");
+    removeBtn.className = "remove";
+    removeBtn.textContent = "Remove";
+    removeBtn.dataset.id = seat.id;
+    removeBtn.addEventListener("click", function () {
+      removeFromCart(this.dataset.id);
+    });
+
     li.appendChild(info);
     li.appendChild(price);
+    li.appendChild(removeBtn);
     cartList.appendChild(li);
   }
 
   cartEmpty.hidden = cart.length > 0;
   cartCount.textContent = cart.length;
   cartTotal.textContent = money(total);
+  clearBtn.disabled = cart.length === 0;
 }
 
 // only the ADD TO CART button adds a seat
@@ -302,6 +333,8 @@ addBtn.addEventListener("click", function () {
     addToCart(selectedId);
   }
 });
+
+clearBtn.addEventListener("click", clearCart);
 
 // ---------- start ----------
 makeSeats();
