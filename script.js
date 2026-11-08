@@ -504,6 +504,17 @@ window.addEventListener("resize", function () {
   }
 });
 
+// ---------- Escape key stops looking at the seat ----------
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && selectedId) {
+    var oldId = selectedId;
+    selectedId = null;
+    refreshSeat(oldId);
+    showDetails(null);
+  }
+});
+
 // ---------- start ----------
 makeSeats();
 drawVenue();
