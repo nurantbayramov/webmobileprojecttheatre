@@ -494,6 +494,16 @@ window.addEventListener("pointerup", function () {
   }
 });
 
+// ---------- when the window size changes ----------
+
+window.addEventListener("resize", function () {
+  if (viewMoved) {
+    showView();
+  } else {
+    resetView();
+  }
+});
+
 // ---------- start ----------
 makeSeats();
 drawVenue();
