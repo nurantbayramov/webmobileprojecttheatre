@@ -447,7 +447,7 @@ window.addEventListener("pointermove", function (e) {
   lastY = e.clientY;
 });
 
-window.addEventListener("pointerup", function () {
+function stopDrag() {
   if (!down) {
     return;
   }
@@ -458,7 +458,10 @@ window.addEventListener("pointerup", function () {
     dragged = true;
     setTimeout(function () { dragged = false; }, 0);
   }
-});
+}
+
+window.addEventListener("pointerup", stopDrag);
+window.addEventListener("pointercancel", stopDrag);   // touch can get cancelled
 
 window.addEventListener("resize", function () {
   if (moved) {
