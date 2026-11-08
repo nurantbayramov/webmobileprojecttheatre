@@ -175,6 +175,82 @@ function drawLegend() {
   legend.innerHTML = html;
 }
 
+// ---------- looking at a seat (inspect) ----------
+
+// update how one seat looks on the map
+function refreshSeat(id) {
+  var btn = seatButtons[id];
+  if (!btn) {
+    return;
+  }
+  btn.classList.toggle("selected", selectedId === id);
+  btn.classList.toggle("in-cart", cart.indexOf(id) !== -1);
+}
+
+// show the seat info in the details box (or the empty message if id is null)
+function showDetails(id) {
+  var seat = findSeat(id);
+
+  if (!seat) {
+    details.innerHTML = "<p class='muted'>No seat selected. Click a seat on the map.</p>";
+    addBtn.disabled = true;
+    addBtn.textContent = "ADD TO CART";
+    return;
+  }
+
+  var inCart = cart.indexOf(id) !== -1;
+  var status = "Available";
+  var statusClass = "available";
+  if (!seat.available) {
+    status = "Unavailable";
+    statusClass = "unavailable";
+  } else if (inCart) {
+    status = "In your cart";
+    statusClass = "incart";
+  }
+
+  details.innerHTML =
+    "<dl>" +
+    "<dt>Section</dt><dd>" + seat.sectionName + "</dd>" +
+    "<dt>Row</dt><dd>" + seat.row + "</dd>" +
+    "<dt>Seat</dt><dd>" + seat.number + "</dd>" +
+    "<dt>Category</dt><dd>" + seat.categoryName + "</dd>" +
+    "<dt>Price</dt><dd class='price'>" + money(seat.price) + "</dd>" +
+    "<dt>Status</dt><dd><span class='tag " + statusClass + "'>" + status + "</span></dd>" +
+    "</dl>";
+
+  // the button only works for free seats that are not in the cart yet
+  addBtn.disabled = !seat.available || inCart;
+  if (!seat.available) {
+    addBtn.textContent = "SEAT UNAVAILABLE";
+  } else if (inCart) {
+    addBtn.textContent = "ALREADY IN CART";
+  } else {
+    addBtn.textContent = "ADD TO CART";
+  }
+}
+
+function selectSeat(id) {
+  var oldId = selectedId;
+  selectedId = id;
+  if (oldId) {
+    refreshSeat(oldId);
+  }
+  refreshSeat(id);
+  showDetails(id);
+}
+
+// clicking a seat ONLY selects it, it does not go in the cart
+world.addEventListener("click", function (e) {
+  if (justDragged) {
+    return;
+  }
+  var btn = e.target.closest(".seat");
+  if (btn) {
+    selectSeat(btn.dataset.id);
+  }
+});
+
 // ---------- start ----------
 makeSeats();
 drawVenue();
