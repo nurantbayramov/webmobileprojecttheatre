@@ -251,7 +251,61 @@ world.addEventListener("click", function (e) {
   }
 });
 
+// ---------- cart ----------
+
+function addToCart(id) {
+  var seat = findSeat(id);
+  if (!seat) {
+    return;
+  }
+  if (!seat.available) {
+    return;               // sold seats can never be added
+  }
+  if (cart.indexOf(id) !== -1) {
+    return;               // already in the cart, no duplicates
+  }
+
+  cart.push(id);
+  refreshSeat(id);
+  drawCart();
+  showDetails(id);
+}
+
+function drawCart() {
+  cartList.innerHTML = "";
+  var total = 0;
+
+  for (var i = 0; i < cart.length; i++) {
+    var seat = findSeat(cart[i]);
+    total = total + seat.price;
+
+    var li = document.createElement("li");
+    var info = document.createElement("span");
+    info.innerHTML = "<b>Row " + seat.row + ", Seat " + seat.number + "</b><br><small>" +
+      seat.sectionName + " (" + seat.categoryName + ")</small>";
+    var price = document.createElement("span");
+    price.textContent = money(seat.price);
+
+    li.appendChild(info);
+    li.appendChild(price);
+    cartList.appendChild(li);
+  }
+
+  cartEmpty.hidden = cart.length > 0;
+  cartCount.textContent = cart.length;
+  cartTotal.textContent = money(total);
+}
+
+// only the ADD TO CART button adds a seat
+addBtn.addEventListener("click", function () {
+  if (selectedId) {
+    addToCart(selectedId);
+  }
+});
+
 // ---------- start ----------
 makeSeats();
 drawVenue();
 drawLegend();
+drawCart();
+showDetails(null);
