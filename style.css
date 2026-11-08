@@ -246,3 +246,22 @@ dd { margin: 0; font-weight: bold; }
 }
 .controls button:hover { background: #2c3358; }
 #reset-view { font-size: 11px; }
+
+/* small screens */
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; padding: 10px 12px 20px; }
+  .viewport { height: 56vh; min-height: 300px; }
+  header h1 { font-size: 20px; }
+}
+
+@media (max-width: 480px) {
+  .controls {
+    grid-template-columns: repeat(3, 36px);
+    grid-auto-rows: 36px;
+    right: 8px;
+    bottom: 8px;
+    padding: 6px;
+    gap: 4px;
+  }
+  .legend { font-size: 12px; gap: 6px 12px; }
+}
