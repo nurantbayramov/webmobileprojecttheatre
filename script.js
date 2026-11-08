@@ -161,6 +161,21 @@ function drawVenue() {
   }
 }
 
+// ---------- legend under the map ----------
+
+function drawLegend() {
+  var html = "";
+  for (var name in categories) {
+    var cat = categories[name];
+    html += "<li><span class='swatch' style='--color:" + cat.color + "'></span>" + cat.name + " " + money(cat.price) + "</li>";
+  }
+  html += "<li><span class='swatch s-selected'></span>Selected</li>";
+  html += "<li><span class='swatch s-cart'></span>In cart</li>";
+  html += "<li><span class='swatch s-sold'></span>Unavailable</li>";
+  legend.innerHTML = html;
+}
+
 // ---------- start ----------
 makeSeats();
 drawVenue();
+drawLegend();
