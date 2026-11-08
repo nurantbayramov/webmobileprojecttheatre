@@ -438,6 +438,62 @@ document.getElementById("move-left").addEventListener("click", function () { mov
 document.getElementById("move-right").addEventListener("click", function () { moveView(-STEP, 0); });
 document.getElementById("reset-view").addEventListener("click", resetView);
 
+// ---------- bonus: mouse wheel zoom and drag to move ----------
+
+viewport.addEventListener("wheel", function (e) {
+  e.preventDefault();
+  var box = viewport.getBoundingClientRect();
+  var factor = Math.exp(-e.deltaY * 0.0015);
+  zoomAt(factor, e.clientX - box.left, e.clientY - box.top);
+}, { passive: false });
+
+var mouseDown = false;
+var dragMoved = false;
+var startX = 0;
+var startY = 0;
+var lastX = 0;
+var lastY = 0;
+
+viewport.addEventListener("pointerdown", function (e) {
+  if (e.button !== 0) {
+    return;
+  }
+  mouseDown = true;
+  dragMoved = false;
+  startX = lastX = e.clientX;
+  startY = lastY = e.clientY;
+});
+
+window.addEventListener("pointermove", function (e) {
+  if (!mouseDown) {
+    return;
+  }
+  // small movements are still a normal click, not a drag
+  if (!dragMoved) {
+    if (Math.abs(e.clientX - startX) < 5 && Math.abs(e.clientY - startY) < 5) {
+      return;
+    }
+    dragMoved = true;
+    viewport.classList.add("dragging");
+  }
+  moveView(e.clientX - lastX, e.clientY - lastY);
+  lastX = e.clientX;
+  lastY = e.clientY;
+});
+
+window.addEventListener("pointerup", function () {
+  if (!mouseDown) {
+    return;
+  }
+  mouseDown = false;
+  viewport.classList.remove("dragging");
+  if (dragMoved) {
+    // the click event comes right after pointerup, so block it for a moment
+    justDragged = true;
+    setTimeout(function () { justDragged = false; }, 0);
+  }
+});
+
 // ---------- start ----------
 makeSeats();
 drawVenue();
