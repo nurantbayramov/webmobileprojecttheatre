@@ -266,6 +266,7 @@ function addToCart(id) {
   }
 
   cart.push(id);
+  saveCart();
   refreshSeat(id);
   drawCart();
   showDetails(id);
@@ -277,6 +278,7 @@ function removeFromCart(id) {
     return;
   }
   cart.splice(index, 1);
+  saveCart();
   refreshSeat(id);        // the seat on the map changes back right away
   drawCart();
   showDetails(selectedId);
@@ -285,6 +287,7 @@ function removeFromCart(id) {
 function clearCart() {
   var oldCart = cart;
   cart = [];
+  saveCart();
   for (var i = 0; i < oldCart.length; i++) {
     refreshSeat(oldCart[i]);
   }
@@ -336,9 +339,43 @@ addBtn.addEventListener("click", function () {
 
 clearBtn.addEventListener("click", clearCart);
 
+// ---------- saving the cart in localStorage ----------
+
+function saveCart() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+  } catch (e) {
+    // storage not available, the page still works without it
+  }
+}
+
+function loadCart() {
+  var saved = null;
+  try {
+    saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  } catch (e) {
+    saved = null;
+  }
+  if (!Array.isArray(saved)) {
+    return;
+  }
+
+  // only keep ids that are real, free seats and not repeated
+  for (var i = 0; i < saved.length; i++) {
+    var seat = findSeat(saved[i]);
+    if (seat && seat.available && cart.indexOf(seat.id) === -1) {
+      cart.push(seat.id);
+    }
+  }
+}
+
 // ---------- start ----------
 makeSeats();
 drawVenue();
 drawLegend();
+loadCart();                          // get the saved cart back
+for (var k = 0; k < cart.length; k++) {
+  refreshSeat(cart[k]);              // and mark those seats on the map
+}
 drawCart();
 showDetails(null);
