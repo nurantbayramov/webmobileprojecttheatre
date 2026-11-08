@@ -369,6 +369,75 @@ function loadCart() {
   }
 }
 
+// ---------- zoom and move buttons ----------
+
+var scale = 1;
+var moveX = 0;
+var moveY = 0;
+var viewMoved = false;   // true once the user changed the view
+var MIN_SCALE = 0.35;
+var MAX_SCALE = 3;
+var STEP = 90;           // how far the move buttons go
+var ZOOM = 1.25;         // how much the zoom buttons zoom
+
+// put the map in the right place (and do not let it go too far away)
+function showView() {
+  var vw = viewport.clientWidth;
+  var vh = viewport.clientHeight;
+  var keep = 100;        // at least this much of the venue stays on screen
+
+  if (moveX > vw - keep) { moveX = vw - keep; }
+  if (moveX < keep - WORLD_W * scale) { moveX = keep - WORLD_W * scale; }
+  if (moveY > vh - keep) { moveY = vh - keep; }
+  if (moveY < keep - WORLD_H * scale) { moveY = keep - WORLD_H * scale; }
+
+  world.style.transform = "translate(" + moveX + "px, " + moveY + "px) scale(" + scale + ")";
+}
+
+// fit the whole venue in the middle of the box
+function resetView() {
+  var vw = viewport.clientWidth;
+  var vh = viewport.clientHeight;
+  scale = Math.min(vw / WORLD_W, vh / WORLD_H) * 0.96;
+  moveX = (vw - WORLD_W * scale) / 2;
+  moveY = (vh - WORLD_H * scale) / 2;
+  viewMoved = false;
+  showView();
+}
+
+// zoom around a point (px, py) inside the box
+function zoomAt(factor, px, py) {
+  var newScale = scale * factor;
+  if (newScale < MIN_SCALE) { newScale = MIN_SCALE; }
+  if (newScale > MAX_SCALE) { newScale = MAX_SCALE; }
+
+  moveX = px - (px - moveX) * (newScale / scale);
+  moveY = py - (py - moveY) * (newScale / scale);
+  scale = newScale;
+  viewMoved = true;
+  showView();
+}
+
+function moveView(dx, dy) {
+  moveX = moveX + dx;
+  moveY = moveY + dy;
+  viewMoved = true;
+  showView();
+}
+
+document.getElementById("zoom-in").addEventListener("click", function () {
+  zoomAt(ZOOM, viewport.clientWidth / 2, viewport.clientHeight / 2);
+});
+document.getElementById("zoom-out").addEventListener("click", function () {
+  zoomAt(1 / ZOOM, viewport.clientWidth / 2, viewport.clientHeight / 2);
+});
+// "up" shows what is above, so the map slides down
+document.getElementById("move-up").addEventListener("click", function () { moveView(0, STEP); });
+document.getElementById("move-down").addEventListener("click", function () { moveView(0, -STEP); });
+document.getElementById("move-left").addEventListener("click", function () { moveView(STEP, 0); });
+document.getElementById("move-right").addEventListener("click", function () { moveView(-STEP, 0); });
+document.getElementById("reset-view").addEventListener("click", resetView);
+
 // ---------- start ----------
 makeSeats();
 drawVenue();
@@ -379,3 +448,4 @@ for (var k = 0; k < cart.length; k++) {
 }
 drawCart();
 showDetails(null);
+resetView();
