@@ -137,7 +137,12 @@ function drawVenue() {
     btn.style.left = seat.x + "px";
     btn.style.top = seat.y + "px";
     btn.style.setProperty("--color", types[seat.type].color);
-    btn.title = seat.section + ", Row " + seat.row + ", Seat " + seat.num + " - " + money(seat.price);
+    var label = seat.section + ", Row " + seat.row + ", Seat " + seat.num + " - " + money(seat.price);
+    if (!seat.free) {
+      label += " (unavailable)";
+    }
+    btn.title = label;
+    btn.setAttribute("aria-label", label);
     btn.innerHTML = "<span>" + seat.num + "</span>";
     btns[seat.id] = btn;
     world.appendChild(btn);
