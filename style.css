@@ -265,3 +265,19 @@ dd { margin: 0; font-weight: bold; }
   }
   .legend { font-size: 12px; gap: 6px 12px; }
 }
+
+/* on phones the buttons go under the map so they dont cover seats */
+@media (max-width: 600px) {
+  .controls {
+    position: static;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 40px;
+    gap: 4px;
+    padding: 6px;
+    border: none;
+    border-top: 1px solid #2d3358;
+    border-radius: 0;
+    background: #151932;
+  }
+  .controls span { display: none; }
+}
