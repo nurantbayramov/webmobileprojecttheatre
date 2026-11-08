@@ -199,3 +199,13 @@ dd { margin: 0; font-weight: bold; }
 .swatch.s-selected { background: white; border: 2px solid #ffcc4d; }
 .swatch.s-cart { background: #000; border: 1px solid #5dff9a; }
 .swatch.s-sold { background: #3a3f55; }
+
+/* the seat that is being looked at */
+.seat.selected {
+  background: white;
+  color: black;
+  border: 1px solid black;
+  box-shadow: 0 0 0 3px #ffcc4d;
+  transform: scale(1.25);
+  z-index: 5;
+}
