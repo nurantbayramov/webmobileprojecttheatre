@@ -320,7 +320,11 @@ clearBtn.addEventListener("click", clearCart);
 // ---------- localStorage ----------
 
 function saveCart() {
-  localStorage.setItem(KEY, JSON.stringify(cart));
+  try {
+    localStorage.setItem(KEY, JSON.stringify(cart));
+  } catch (e) {
+    // storage is full or blocked, the page should still work
+  }
 }
 
 function loadCart() {
