@@ -376,6 +376,10 @@ function resetView() {
   var vw = view.clientWidth;
   var vh = view.clientHeight;
   scale = Math.min(vw / W, vh / H) * 0.96;
+  // on phones start zoomed in a bit so the seats are big enough to tap
+  if (vw < 600 && scale < 0.6) {
+    scale = 0.6;
+  }
   mapX = (vw - W * scale) / 2;
   mapY = (vh - H * scale) / 2;
   moved = false;
